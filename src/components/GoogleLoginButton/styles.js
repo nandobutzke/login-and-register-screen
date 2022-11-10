@@ -1,6 +1,7 @@
+import GoogleLogin from 'react-google-login';
 import styled from 'styled-components';
 
-export const GoogleButton = styled.button`
+export const StyledGoogleLoginButton = styled(GoogleLogin)`
   margin-top: 16px;
 
   background-color: #1A202C;

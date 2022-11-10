@@ -1,5 +1,5 @@
 import Button from '../Button';
-import SignInWithGoogle from '../SignInWithGoogle';
+import GoogleLoginButton from '../GoogleLoginButton';
 
 import {
   ButtonContainer, Form, FormGroup, Input,
@@ -16,7 +16,7 @@ export function SignInForm() {
       </FormGroup>
       <ButtonContainer>
         <Button type="submit">Entrar</Button>
-        <SignInWithGoogle type="button" />
+        <GoogleLoginButton type="button" />
       </ButtonContainer>
     </Form>
   );
