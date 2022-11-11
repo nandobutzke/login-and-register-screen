@@ -1,7 +1,9 @@
 import { gapi } from 'gapi-script';
 import { useEffect } from 'react';
-import { StyledGoogleLoginButton } from './styles';
-// import { StyledGoogleLoginButton } from './styles';
+import { GoogleLogin } from 'react-google-login';
+import { StyledButton } from './styles';
+
+import googleIcon from '../../assets/images/icons/google-icon.svg';
 
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
@@ -22,17 +24,22 @@ export default function GoogleLoginButton() {
   }
 
   return (
-    <StyledGoogleLoginButton
+    <GoogleLogin
       clientId={clientId}
+      render={(renderProps) => (
+        <StyledButton type="button" onClick={renderProps.onClick} disabled={renderProps.disabled}>
+          <img src={googleIcon} alt="Logo do Google, Letra G com várias cores" />
+          <span>Ou faça login com o Google</span>
+        </StyledButton>
+      )}
       buttonText="Ou faça login com o Google"
       onSuccess={handleGoogleResponse}
+      onFailure={handleGoogleResponse}
       cookiePolicy="single_host_origin"
     />
   );
 }
 
 /*
-  <img src={googleIcon} alt="Logo do Google, Letra G com várias cores" />
-      <span>Ou faça login com o Google</span>
 
 */
