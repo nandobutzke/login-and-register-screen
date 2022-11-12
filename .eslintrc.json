@@ -28,6 +28,7 @@
         "allowArrowFunctions": 0,
         "allowFunctions": 0,
         "allowBind": 0
-      }]
+      }],
+      "react/jsx-no-constructed-context-values": "off"
     }
 }

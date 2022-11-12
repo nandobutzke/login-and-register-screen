@@ -16,7 +16,7 @@ export default function SignIn() {
 
         <SignInForm />
         <footer>
-          <span>Não tem uma conta? <Link to="/">Cadastre-se</Link></span>
+          <span>Não tem uma conta? <Link to="/inicio">Cadastre-se</Link></span>
         </footer>
       </main>
     </>

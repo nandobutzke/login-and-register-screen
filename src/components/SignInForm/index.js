@@ -1,11 +1,38 @@
-import Button from '../Button';
-import GoogleLoginButton from '../GoogleLoginButton';
+import { gapi } from 'gapi-script';
+import { useContext, useEffect } from 'react';
 
+import { GoogleLogin } from 'react-google-login';
+
+import { Link } from 'react-router-dom';
 import {
   ButtonContainer, Form, FormGroup, Input,
 } from './styles';
+import Button from '../Button';
+
+import { AuthContext } from '../../contexts/AuthContext';
+import GoogleButton from './GoogleButton';
+
+const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 export function SignInForm() {
+  const { handleSetLoggedUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    function startLogin() {
+      gapi.client.init({
+        clientId,
+        scope: '',
+      });
+    }
+
+    gapi.load('client:auth2', startLogin);
+  }, []);
+
+  function handleGoogleResponse(response) {
+    console.log(response.profileObj);
+    handleSetLoggedUser(response.profileObj);
+  }
+
   return (
     <Form>
       <FormGroup>
@@ -16,8 +43,16 @@ export function SignInForm() {
       </FormGroup>
       <ButtonContainer>
         <Button type="submit">Entrar</Button>
-        <GoogleLoginButton type="button" />
+        <GoogleLogin
+          clientId={clientId}
+          render={GoogleButton}
+          buttonText="Ou faça login com o Google"
+          onSuccess={handleGoogleResponse}
+          onFailure={handleGoogleResponse}
+          cookiePolicy="single_host_origin"
+        />
       </ButtonContainer>
+      <Link to="/inicio">link</Link>
     </Form>
   );
 }
