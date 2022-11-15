@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
-import aboutUsWallpaper from '../assets/images/about-us-wallpaper.svg';
-import { SignInForm } from '../components/SignInForm';
+import aboutUsWallpaper from '../../assets/images/about-us-wallpaper.svg';
+import { SignInForm } from '../../components/SignInForm';
+import { Container } from './styles';
 
 export default function SignIn() {
   return (
-    <>
+    <Container>
       <aside>
         <img src={aboutUsWallpaper} alt="Imagem de uma janela com vários avatares exibidos" />
       </aside>
@@ -19,6 +20,6 @@ export default function SignIn() {
           <span>Não tem uma conta? <Link to="/inicio">Cadastre-se</Link></span>
         </footer>
       </main>
-    </>
+    </Container>
   );
 }

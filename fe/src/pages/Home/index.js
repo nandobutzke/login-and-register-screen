@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
+import { Container } from './styles';
 
 export default function Home() {
   const { user } = useContext(AuthContext);
@@ -7,6 +8,8 @@ export default function Home() {
   console.log(user);
 
   return (
-    <h1>Teste</h1>
+    <Container>
+      <h1>Teste</h1>
+    </Container>
   );
 }
