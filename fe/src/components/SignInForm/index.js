@@ -3,7 +3,6 @@ import { useContext, useEffect } from 'react';
 
 import { GoogleLogin } from 'react-google-login';
 
-import { Link } from 'react-router-dom';
 import {
   ButtonContainer, Form, FormGroup, Input,
 } from './styles';
@@ -52,7 +51,6 @@ export function SignInForm() {
           cookiePolicy="single_host_origin"
         />
       </ButtonContainer>
-      <Link to="/inicio">link</Link>
     </Form>
   );
 }
