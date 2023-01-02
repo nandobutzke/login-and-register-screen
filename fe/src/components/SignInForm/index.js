@@ -1,5 +1,7 @@
+import PropTypes from 'prop-types';
+
 import { gapi } from 'gapi-script';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { GoogleLogin } from 'react-google-login';
 
@@ -13,7 +15,9 @@ import GoogleButton from './GoogleButton';
 
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
-export function SignInForm() {
+export function SignInForm({ onSubmit }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const { handleSetLoggedUser } = useContext(AuthContext);
 
   useEffect(() => {
@@ -28,17 +32,25 @@ export function SignInForm() {
   }, []);
 
   function handleGoogleResponse(response) {
-    console.log(response.profileObj);
     handleSetLoggedUser(response.profileObj);
   }
 
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    await onSubmit({
+      email,
+      password,
+    });
+  }
+
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <FormGroup>
-        <Input type="text" name="email" placeholder="E-mail" />
+        <Input type="text" name="email" placeholder="E-mail" onChange={(event) => setEmail(event.target.value)} />
       </FormGroup>
       <FormGroup>
-        <Input type="password" name="password" placeholder="Senha" />
+        <Input type="password" name="password" placeholder="Senha" onChange={(event) => setPassword(event.target.value)} />
       </FormGroup>
       <ButtonContainer>
         <Button type="submit">Entrar</Button>
@@ -54,3 +66,7 @@ export function SignInForm() {
     </Form>
   );
 }
+
+SignInForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};

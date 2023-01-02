@@ -29,6 +29,8 @@
         "allowFunctions": 0,
         "allowBind": 0
       }],
-      "react/jsx-no-constructed-context-values": "off"
+      "react/jsx-no-constructed-context-values": "off",
+      "class-methods-use-this": "off",
+      "no-empty": "off"
     }
 }
