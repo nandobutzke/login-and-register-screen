@@ -5,7 +5,7 @@ const client = new Client({
   password: 'root',
   host: 'localhost',
   port: 5432,
-  database: 'logincodeland',
+  database: 'loginsystem',
 });
 
 client.connect();

@@ -3,7 +3,7 @@ const UserRepository = require('../repositories/UserRepository');
 
 class UserController {
   async store(request, response) {
-    const { email, password } = request.body;
+    const { name, email, password } = request.body;
 
     const emailAlreadyExists = await UserRepository.findEmail(email);
 
@@ -13,17 +13,13 @@ class UserController {
 
     const hashedPassword = await hash(password, 8);
 
-    const user = await UserRepository.create({ email, password: hashedPassword });
+    const user = await UserRepository.create({ name, email, password: hashedPassword });
 
+    delete user.id;
+    delete user.name;
     delete user.password;
 
-    response.status(201).json(user);
-  }
-
-  async index(request, response) {
-    const users = await UserRepository.findAll();
-
-    response.status(200).json(users);
+    response.status(201).json({ ...user, password });
   }
 }
 

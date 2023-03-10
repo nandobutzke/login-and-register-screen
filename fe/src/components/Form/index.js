@@ -1,10 +1,6 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const Form = styled.form``;
-
-export const FormGroup = styled.div`
-  margin-top: 16px;
-`;
 
 export const Input = styled.input`
   width: 100%;
@@ -12,12 +8,23 @@ export const Input = styled.input`
 
   border: 1px solid #E8E8E8;
   border-radius: 4px;
+
+  ${({ theme, error }) => error && css`
+    border-color: ${theme.colors.danger.main};
+    color: ${theme.colors.danger.main};
+  `}
 `;
 
 export const ButtonContainer = styled.div`
   margin-top: 24px;
 
+  .already-registered {
+    font-size: 14px;
+  }
+
   button {
+    margin-top: 24px;
+
     display: flex;
     align-items: center;
     justify-content: center;

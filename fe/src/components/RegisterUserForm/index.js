@@ -1,18 +1,20 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
-
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import {
-  ButtonContainer, Form, Input,
+  ButtonContainer,
+  Form,
+  Input,
 } from '../Form';
 import FormGroup from '../FormGroup';
-import Button from '../Button';
-
 import GoogleLogin from '../GoogleLogin';
-import isEmailValid from '../../utils/isValidEmail';
-// import delay from '../../utils/delay';
-import useErrors from '../../hooks/useErrors';
 
-export function SignInForm({ onSubmit }) {
+import Button from '../Button';
+import useErrors from '../../hooks/useErrors';
+import isEmailValid from '../../utils/isValidEmail';
+
+export function RegisterUserForm({ onSubmit }) {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -21,19 +23,19 @@ export function SignInForm({ onSubmit }) {
     errors, setError, removeError, getMessageByFieldName,
   } = useErrors();
 
-  function handlePasswordChange(event) {
-    setPassword(event.target.value);
+  function handleNameChange(event) {
+    setName(event.target.value);
 
     if (event.target.value) {
-      removeError('password');
+      removeError('name');
     }
   }
 
-  function handleValidatePassword(event) {
+  function handleValidateName(event) {
     if (!event.target.value) {
-      setError({ field: 'password', message: "O campo 'Senha' é obrigatório!" });
+      setError({ field: 'name', message: "O campo 'Nome' é obrigatório!" });
     } else {
-      removeError('password');
+      removeError('name');
     }
   }
 
@@ -53,14 +55,31 @@ export function SignInForm({ onSubmit }) {
     }
   }
 
+  function handlePasswordChange(event) {
+    setPassword(event.target.value);
+
+    if (event.target.value) {
+      removeError('password');
+    }
+  }
+
+  function handleValidatePassword(event) {
+    if (!event.target.value) {
+      setError({ field: 'password', message: "O campo 'Senha' é obrigatório!" });
+    } else {
+      removeError('password');
+    }
+  }
+
+  const isFormValid = ((name && email && password) && errors.length === 0);
+
   async function handleSubmit(event) {
     event.preventDefault();
 
     setIsSubmitting(true);
 
-    // await delay(3000);
-
     await onSubmit({
+      name,
       email,
       password,
     });
@@ -68,16 +87,24 @@ export function SignInForm({ onSubmit }) {
     setIsSubmitting(false);
   }
 
-  const isFormValid = ((email && password) && isEmailValid(email) && errors.length === 0);
-
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} noValidate>
+      <FormGroup error={getMessageByFieldName('name')}>
+        <Input
+          type="text"
+          name="name"
+          error={getMessageByFieldName('name')}
+          placeholder="Nome do Usuário"
+          onChange={handleNameChange}
+          onBlur={handleValidateName}
+        />
+      </FormGroup>
       <FormGroup error={getMessageByFieldName('email')}>
         <Input
           type="email"
           name="email"
-          placeholder="E-mail"
           error={getMessageByFieldName('email')}
+          placeholder="E-mail"
           onChange={handleEmailChange}
           onBlur={handleValidateEmail}
         />
@@ -86,26 +113,27 @@ export function SignInForm({ onSubmit }) {
         <Input
           type="password"
           name="password"
-          placeholder="Senha"
           error={getMessageByFieldName('password')}
+          placeholder="Senha"
           onChange={handlePasswordChange}
           onBlur={handleValidatePassword}
         />
       </FormGroup>
       <ButtonContainer>
+        <span className="already-registered">Já possuí um cadastro? <Link to="/login">Entrar</Link></span>
         <Button
           type="submit"
           disabled={!isFormValid}
           isLoading={isSubmitting}
         >
-          Entrar
+          Registrar
         </Button>
-        <GoogleLogin title="Ou faça login com o Google" />
+        <GoogleLogin />
       </ButtonContainer>
     </Form>
   );
 }
 
-SignInForm.propTypes = {
+RegisterUserForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };

@@ -5,7 +5,7 @@
   "author": "Fernando Butzke",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon --watch src/index.js "
+    "dev": "nodemon --ignore nome_modules --watch src/index.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
