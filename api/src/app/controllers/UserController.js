@@ -15,11 +15,9 @@ class UserController {
 
     const user = await UserRepository.create({ name, email, password: hashedPassword });
 
-    delete user.id;
-    delete user.name;
     delete user.password;
 
-    response.status(201).json({ ...user, password });
+    response.status(201).json({ ok: 'success' });
   }
 }
 

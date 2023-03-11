@@ -73,9 +73,13 @@ export default function AuthProvider({ children }) {
 
   async function handleRegisterUser(data) {
     try {
-      const user = await api.post('/users', data);
+      await api.post('/users', data);
 
-      await handleLogin(user.data);
+      const loginData = data;
+
+      delete loginData.name;
+
+      await handleLogin(loginData);
     } catch (error) {
       if (error?.code === 'ERR_NETWORK') {
         toast({
