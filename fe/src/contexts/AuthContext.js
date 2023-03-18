@@ -1,6 +1,10 @@
-import { createContext, useState } from 'react';
+import {
+  createContext, useCallback, useEffect, useState,
+} from 'react';
 import { PropTypes } from 'prop-types';
+import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import { api } from '../services/api';
 import toast from '../utils/toast';
 
@@ -10,21 +14,15 @@ export default function AuthProvider({ children }) {
   const history = useHistory();
   const [authenticated, setAuthenticated] = useState(() => {
     const token = localStorage.getItem('token');
-    const user = localStorage.getItem('user');
 
-    if (user && token) {
+    if (token) {
       api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
-      return true;
-    }
-
-    const googleUser = JSON.parse(user);
-
-    if (googleUser && googleUser.googleId) {
       return true;
     }
 
     return false;
   });
+  const [googleUser, setGoogleUser] = useState([]);
 
   async function handleLogin(data) {
     try {
@@ -61,8 +59,9 @@ export default function AuthProvider({ children }) {
       api.defaults.headers.Authorization = undefined;
 
       setAuthenticated(false);
+      googleLogout();
 
-      history.push('/login');
+      history.push('/');
     } catch {
       toast({
         type: 'danger',
@@ -96,22 +95,49 @@ export default function AuthProvider({ children }) {
     }
   }
 
-  function handleSetGoogleLoggedUser(googleUserData) {
-    try {
-      if (googleUserData) {
-        localStorage.setItem('user', JSON.stringify(googleUserData));
+  const handleSetGoogleUser = useCallback(async () => {
+    if (googleUser && googleUser.length !== 0) {
+      try {
+        const response = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${googleUser?.access_token}`, {
+          headers: {
+            Authorization: `Bearer ${googleUser.access_token}`,
+            Accept: 'application/json',
+          },
+        });
 
-        setAuthenticated(true);
+        localStorage.setItem('token', JSON.stringify(googleUser.access_token));
+        localStorage.setItem('user', JSON.stringify(response.data));
 
         history.push('/inicio');
-      }
-    } catch (error) {
-      if (error?.code === 'ERR_NETWORK') {
-        toast({
-          type: 'danger',
-          text: 'Falha no servidor! Tente novamente mais tarde.',
-        });
-      }
+      } catch {}
+    }
+  }, [history, googleUser]);
+
+  useEffect(() => {
+    handleSetGoogleUser();
+  }, [handleSetGoogleUser]);
+
+  const login = useGoogleLogin({
+    onSuccess: (response) => {
+      setGoogleUser(response);
+      setAuthenticated(true);
+    },
+    onError: () => {
+      toast({
+        type: 'danger',
+        text: 'Ocorreu um erro! Por favor, tente novamente.',
+      });
+    },
+  });
+
+  async function handleGoogleLogin() {
+    try {
+      login();
+    } catch {
+      toast({
+        type: 'danger',
+        text: 'Ocorreu um erro! Por favor, tente novamente.',
+      });
     }
   }
 
@@ -120,9 +146,10 @@ export default function AuthProvider({ children }) {
       value={{
         authenticated,
         handleLogin,
+        handleGoogleLogin,
+        googleUser,
         handleLogout,
         handleRegisterUser,
-        handleSetGoogleLoggedUser,
       }}
     >
       {children}

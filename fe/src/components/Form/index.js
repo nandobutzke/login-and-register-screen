@@ -1,6 +1,8 @@
 import styled, { css } from 'styled-components';
 
-export const Form = styled.form``;
+export const Form = styled.form`
+  
+`;
 
 export const Input = styled.input`
   width: 100%;
@@ -41,5 +43,4 @@ export const ButtonContainer = styled.div`
 
     width: 100%;
   }
-
 `;

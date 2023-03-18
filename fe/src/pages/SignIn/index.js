@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { SignInForm } from '../../components/SignInForm';
 import { AuthContext } from '../../contexts/AuthContext';
+import { Container } from './styles';
 
 export default function SignIn() {
   const { handleLogin } = useContext(AuthContext);
@@ -11,7 +12,7 @@ export default function SignIn() {
   }
 
   return (
-    <>
+    <Container>
       <div>
         <span>Bem-vindo de volta!</span>
         <h2>Faça login na sua conta</h2>
@@ -21,6 +22,6 @@ export default function SignIn() {
       <footer>
         <span>Não tem uma conta? <Link to="/register">Cadastre-se</Link></span>
       </footer>
-    </>
+    </Container>
   );
 }

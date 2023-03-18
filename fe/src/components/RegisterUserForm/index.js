@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
@@ -7,11 +7,12 @@ import {
   Input,
 } from '../Form';
 import FormGroup from '../FormGroup';
-import GoogleLogin from '../GoogleLogin';
 
 import Button from '../Button';
 import useErrors from '../../hooks/useErrors';
 import isEmailValid from '../../utils/isValidEmail';
+import GoogleLoginButton from '../GoogleLoginButton';
+import { AuthContext } from '../../contexts/AuthContext';
 
 export function RegisterUserForm({ onSubmit }) {
   const [name, setName] = useState('');
@@ -22,6 +23,8 @@ export function RegisterUserForm({ onSubmit }) {
   const {
     errors, setError, removeError, getMessageByFieldName,
   } = useErrors();
+
+  const { handleGoogleLogin } = useContext(AuthContext);
 
   function handleNameChange(event) {
     setName(event.target.value);
@@ -120,7 +123,7 @@ export function RegisterUserForm({ onSubmit }) {
         />
       </FormGroup>
       <ButtonContainer>
-        <span className="already-registered">Já possuí um cadastro? <Link to="/login">Entrar</Link></span>
+        <span className="already-registered">Já possuí um cadastro? <Link to="/">Entrar</Link></span>
         <Button
           type="submit"
           disabled={!isFormValid}
@@ -128,7 +131,7 @@ export function RegisterUserForm({ onSubmit }) {
         >
           Registrar
         </Button>
-        <GoogleLogin />
+        <GoogleLoginButton type="button" onClick={handleGoogleLogin} />
       </ButtonContainer>
     </Form>
   );

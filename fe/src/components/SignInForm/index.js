@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
 import {
   ButtonContainer, Form, Input,
@@ -7,15 +7,19 @@ import {
 import FormGroup from '../FormGroup';
 import Button from '../Button';
 
-import GoogleLogin from '../GoogleLogin';
+// import GoogleLogin from '../GoogleLogin';
 import isEmailValid from '../../utils/isValidEmail';
 // import delay from '../../utils/delay';
 import useErrors from '../../hooks/useErrors';
+import { AuthContext } from '../../contexts/AuthContext';
+import GoogleLoginButton from '../GoogleLoginButton';
 
 export function SignInForm({ onSubmit }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { handleGoogleLogin } = useContext(AuthContext);
 
   const {
     errors, setError, removeError, getMessageByFieldName,
@@ -58,8 +62,6 @@ export function SignInForm({ onSubmit }) {
 
     setIsSubmitting(true);
 
-    // await delay(3000);
-
     await onSubmit({
       email,
       password,
@@ -100,7 +102,7 @@ export function SignInForm({ onSubmit }) {
         >
           Entrar
         </Button>
-        <GoogleLogin title="Ou faça login com o Google" />
+        <GoogleLoginButton type="button" onClick={handleGoogleLogin} />
       </ButtonContainer>
     </Form>
   );

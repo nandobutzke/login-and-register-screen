@@ -6,12 +6,13 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
 
-  padding: 16px;
+  padding: 0 16px;
+  margin: 0 auto;
+
   height: 100vh;
 
-  div, footer {
-    width: 500px;
-  }
+  width: 100%;
+  max-width: 500px;
 
   footer {
     position: relative;
