@@ -1,15 +1,23 @@
 import styled, { css } from 'styled-components';
 
-export const Form = styled.form`
-  
-`;
+export const Form = styled.form``;
 
 export const Input = styled.input`
   width: 100%;
-  padding: 16px;
 
-  border: 1px solid #E8E8E8;
+  border: 2px solid #E8E8E8;
   border-radius: 4px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.04);
+  height: 52px;
+  outline: none;
+  padding: 0 16px;
+  appearance: none;
+
+  transition: all 0.2s ease-in;
+
+  &:focus {
+    border-color: ${({ theme }) => theme.colors.blue.main};
+  }
 
   ${({ theme, error }) => error && css`
     border-color: ${theme.colors.danger.main};

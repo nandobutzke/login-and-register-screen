@@ -6,7 +6,7 @@ import xCircleIcon from '../../../assets/images/icons/x-circle.svg';
 import checkCircleIcon from '../../../assets/images/icons/check-circle.svg';
 
 export function ToastMessage({
-  message, onRemoveToast,
+  message, onRemoveToast, isLeaving, animatedRef,
 }) {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -28,6 +28,8 @@ export function ToastMessage({
       onClick={handleRemoveToast}
       tabIndex={0}
       role="button"
+      isLeaving={isLeaving}
+      ref={animatedRef}
     >
       {message.type === 'success' && <img src={checkCircleIcon} alt="Success" />}
       {message.type === 'danger' && <img src={xCircleIcon} alt="Error" />}
@@ -44,4 +46,6 @@ ToastMessage.propTypes = {
     duration: PropTypes.number,
   }).isRequired,
   onRemoveToast: PropTypes.func.isRequired,
+  isLeaving: PropTypes.bool.isRequired,
+  animatedRef: PropTypes.shape().isRequired,
 };

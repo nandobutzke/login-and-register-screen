@@ -1,4 +1,3 @@
-import { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
@@ -9,86 +8,23 @@ import {
 import FormGroup from '../FormGroup';
 
 import Button from '../Button';
-import useErrors from '../../hooks/useErrors';
-import isEmailValid from '../../utils/isValidEmail';
 import GoogleLoginButton from '../GoogleLoginButton';
-import { AuthContext } from '../../contexts/AuthContext';
+import useForm from '../../hooks/useForm';
 
 export function RegisterUserForm({ onSubmit }) {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const {
-    errors, setError, removeError, getMessageByFieldName,
-  } = useErrors();
-
-  const { handleGoogleLogin } = useContext(AuthContext);
-
-  function handleNameChange(event) {
-    setName(event.target.value);
-
-    if (event.target.value) {
-      removeError('name');
-    }
-  }
-
-  function handleValidateName(event) {
-    if (!event.target.value) {
-      setError({ field: 'name', message: "O campo 'Nome' é obrigatório!" });
-    } else {
-      removeError('name');
-    }
-  }
-
-  function handleEmailChange(event) {
-    setEmail(event.target.value);
-
-    if (isEmailValid(event.target.value)) {
-      removeError('email');
-    }
-  }
-
-  function handleValidateEmail(event) {
-    if (event.target.value && !isEmailValid(event.target.value)) {
-      setError({ field: 'email', message: 'E-mail inválido!' });
-    } else {
-      removeError('email');
-    }
-  }
-
-  function handlePasswordChange(event) {
-    setPassword(event.target.value);
-
-    if (event.target.value) {
-      removeError('password');
-    }
-  }
-
-  function handleValidatePassword(event) {
-    if (!event.target.value) {
-      setError({ field: 'password', message: "O campo 'Senha' é obrigatório!" });
-    } else {
-      removeError('password');
-    }
-  }
-
-  const isFormValid = ((name && email && password) && errors.length === 0);
-
-  async function handleSubmit(event) {
-    event.preventDefault();
-
-    setIsSubmitting(true);
-
-    await onSubmit({
-      name,
-      email,
-      password,
-    });
-
-    setIsSubmitting(false);
-  }
+    handleSubmit,
+    getMessageByFieldName,
+    handleNameChange,
+    handleValidateName,
+    handleEmailChange,
+    handleValidateEmail,
+    handlePasswordChange,
+    handleValidatePassword,
+    isRegisterFormValid,
+    isSubmitting,
+    handleGoogleLogin,
+  } = useForm(onSubmit);
 
   return (
     <Form onSubmit={handleSubmit} noValidate>
@@ -126,7 +62,7 @@ export function RegisterUserForm({ onSubmit }) {
         <span className="already-registered">Já possuí um cadastro? <Link to="/">Entrar</Link></span>
         <Button
           type="submit"
-          disabled={!isFormValid}
+          disabled={!isRegisterFormValid}
           isLoading={isSubmitting}
         >
           Registrar

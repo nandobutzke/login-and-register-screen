@@ -1,44 +1,27 @@
-import { useCallback, useEffect, useState } from 'react';
+import { memo } from 'react';
 import { ToastMessage } from '../ToastMessage';
 import { Container } from './styles';
+import useToastContainer from './useToastContainer';
 
-import { toastEventManager } from '../../../utils/toast';
-
-export function ToastContainer() {
-  const [messages, setMessages] = useState([]);
-
-  useEffect(() => {
-    function handleAddToast({ type, text, duration }) {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          id: Math.random(), type, text, duration,
-        },
-      ]);
-    }
-
-    toastEventManager.on('addtoast', handleAddToast);
-    return () => {
-      toastEventManager.removeListener('addtoast', handleAddToast);
-    };
-  }, []);
-
-  const handleRemoveToast = useCallback((id) => {
-    setMessages((prevMessages) => prevMessages.filter(
-      (message) => message.id !== id,
-    ));
-  }, []);
+function ToastContainer() {
+  const {
+    renderList, handleRemoveToast,
+  } = useToastContainer();
 
   return (
     <Container>
-      {messages.map((message) => (
+      {renderList((message, { isLeaving, animatedRef }) => (
         <ToastMessage
           key={message.id}
           message={message}
           onRemoveToast={handleRemoveToast}
+          isLeaving={isLeaving}
+          animatedRef={animatedRef}
         />
       ))}
 
     </Container>
   );
 }
+
+export default memo(ToastContainer);

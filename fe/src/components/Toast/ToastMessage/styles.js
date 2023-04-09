@@ -1,4 +1,28 @@
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
+
+const messageIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+`;
+
+const messageOut = keyframes`
+  from {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  
+  to {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+`;
 
 const containerVariants = {
   default: css`
@@ -21,10 +45,17 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+
   ${({ type }) => containerVariants[type]}
+
+  animation: ${messageIn} 0.3s;
+
+  ${({ isLeaving }) => isLeaving && css` animation: ${messageOut} 0.2s; `}
+
   & + & {
     margin-top: 12px;
   }
+
   strong {
     margin-left: 8px;
   }

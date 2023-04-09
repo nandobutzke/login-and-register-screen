@@ -1,9 +1,8 @@
 import {
   useContext, useState,
 } from 'react';
-import { Container } from './styles';
+import { Container, LogoutButton } from './styles';
 import { AuthContext } from '../../contexts/AuthContext';
-import LogoutButton from '../../components/LogoutButton';
 
 export default function Home() {
   const [user] = useState(() => {
@@ -28,7 +27,9 @@ export default function Home() {
         <span>Login efetuado com sucesso!</span>
         <h2>Bem-vindo {user.name}!</h2>
       </div>
-      <LogoutButton onClick={handleLogoutUser}>Sair</LogoutButton>
+      <LogoutButton type="button" onClick={handleLogoutUser}>
+        Sair
+      </LogoutButton>
     </Container>
   );
 }

@@ -9,7 +9,7 @@ import defaultTheme from '../../assets/styles/default';
 import AuthProvider from '../../contexts/AuthContext';
 
 import { Container } from './styles';
-import { ToastContainer } from '../Toast/ToastContainer';
+import ToastContainer from '../Toast/ToastContainer';
 
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
@@ -22,6 +22,7 @@ export default function App() {
             <React.StrictMode>
               <GlobalStyle />
               <ToastContainer />
+
               <Container>
                 <Routes />
               </Container>
